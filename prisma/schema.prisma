@@ -1,0 +1,633 @@
+// Prisma schema for AI Job Application Tracker
+// Provider: PostgreSQL (production) / SQLite (local development fallback)
+// Generated client is used across the app via src/lib/db.ts
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// Enums
+// ============================================================
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ApplicationStatus {
+  WISHLIST
+  PREPARING
+  APPLIED
+  RESUME_VIEWED
+  PHONE_SCREENING
+  ASSESSMENT
+  TECHNICAL_INTERVIEW
+  MANAGER_INTERVIEW
+  FINAL_INTERVIEW
+  OFFER
+  NEGOTIATION
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+  ARCHIVED
+}
+
+enum ApplicationSource {
+  LINKEDIN
+  INDEED
+  GLASSDOOR
+  REFERRAL
+  WEBSITE
+  RECRUITER
+  OTHER
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum InterviewType {
+  PHONE
+  VIDEO
+  ONSITE
+  TECHNICAL
+  BEHAVIORAL
+  MANAGER
+  PANEL
+  FINAL
+  OTHER
+}
+
+enum TaskType {
+  FOLLOW_UP
+  INTERVIEW_PREP
+  RESUME_UPDATE
+  NETWORKING
+  DEADLINE
+  REMINDER
+  CUSTOM
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  OVERDUE
+}
+
+enum NotificationType {
+  INTERVIEW_REMINDER
+  APPLICATION_REMINDER
+  FOLLOW_UP_REMINDER
+  WEEKLY_SUMMARY
+  SYSTEM
+  TASK_REMINDER
+}
+
+enum NotificationChannel {
+  EMAIL
+  BROWSER
+  IN_APP
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+enum DocumentCategory {
+  RESUME
+  COVER_LETTER
+  CERTIFICATE
+  PORTFOLIO
+  OFFER_LETTER
+  CONTRACT
+  OTHER
+}
+
+enum ActivityType {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  INTERVIEW_SCHEDULED
+  NOTE_ADDED
+  ATTACHMENT_ADDED
+  TASK_COMPLETED
+  LOGIN
+  LOGOUT
+  AI_GENERATION
+  EXPORT
+  IMPORT
+  DELETED
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  TEAM
+}
+
+enum PlanFeature {
+  AI_COVER_LETTER
+  AI_RESUME_ANALYSIS
+  AI_INTERVIEW_COACH
+  AI_EMAIL
+  AI_CHAT
+  ANALYTICS
+  UNLIMITED_APPLICATIONS
+  EXPORT
+}
+
+enum ContactType {
+  RECRUITER
+  HIRING_MANAGER
+  EMPLOYEE
+  OTHER
+}
+
+// ============================================================
+// Auth.js models
+// ============================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  timezone      String    @default("UTC")
+  locale        String    @default("en")
+  theme         String    @default("system")
+  goal          UserGoal?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts           Account[]
+  sessions           Session[]
+  applications       Application[]
+  companies          Company[]
+  interviews         Interview[]
+  tasks              Task[]
+  resumes            Resume[]
+  coverLetters       CoverLetter[]
+  attachments        Attachment[]
+  notifications      Notification[]
+  recruiters         Recruiter[]
+  activityLogs       ActivityLog[]
+  apiKeys            ApiKey[]
+  settings           Settings?
+  subscription       Subscription?
+  bookmarks          Bookmark[]
+  reminders          Reminder[]
+  integrations       Integration[]
+  emailSubscriptions EmailSubscription?
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================================
+// Core domain models
+// ============================================================
+
+model Company {
+  id                  String   @id @default(cuid())
+  userId              String
+  name                String
+  industry            String?
+  size                String?
+  glassdoorRating     Float?
+  website             String?
+  location            String?
+  notes               String?
+  interviewExperience String?
+  salaryRange         String?
+  pros                String?
+  cons                String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+  recruiters   Recruiter[]
+  bookmarks    Bookmark[]
+
+  @@index([userId, name])
+  @@map("companies")
+}
+
+model Application {
+  id              String            @id @default(cuid())
+  userId          String
+  companyId       String?
+  companyName     String
+  position        String
+  jobDescription  String?
+  jobUrl          String?
+  salaryMin       Float?
+  salaryMax       Float?
+  currency        String            @default("USD")
+  location        String?
+  workMode        WorkMode?
+  source          ApplicationSource @default(OTHER)
+  applicationDate DateTime          @default(now())
+  status          ApplicationStatus @default(APPLIED)
+  priority        Priority          @default(MEDIUM)
+  notes           String?
+  resumeId        String?
+  coverLetterId   String?
+  offerDetails    String?
+  offerAmount     Float?
+  rejectionReason String?
+  expectedSalary  Float?
+  benefits        String?
+  bookmarked      Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company      Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  resume       Resume?       @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+  coverLetter  CoverLetter?  @relation(fields: [coverLetterId], references: [id], onDelete: SetNull)
+  interviews   Interview[]
+  tasks        Task[]
+  attachments  Attachment[]
+  reminders    Reminder[]
+  activityLogs ActivityLog[]
+
+  @@index([userId, status])
+  @@index([userId, applicationDate])
+  @@map("applications")
+}
+
+model Interview {
+  id            String        @id @default(cuid())
+  applicationId String
+  userId        String
+  title         String?
+  type          InterviewType @default(PHONE)
+  scheduledAt   DateTime
+  duration      Int           @default(45)
+  location      String?
+  meetingUrl    String?
+  notes         String?
+  feedback      String?
+  completed     Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reminders   Reminder[]
+
+  @@index([userId, scheduledAt])
+  @@map("interviews")
+}
+
+model Task {
+  id                String     @id @default(cuid())
+  userId            String
+  applicationId     String?
+  title             String
+  description       String?
+  type              TaskType   @default(CUSTOM)
+  status            TaskStatus @default(TODO)
+  priority          Priority   @default(MEDIUM)
+  dueAt             DateTime?
+  completedAt       DateTime?
+  recurring         Boolean    @default(false)
+  recurringInterval Int?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  reminders   Reminder[]
+
+  @@index([userId, status])
+  @@index([userId, dueAt])
+  @@map("tasks")
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  fileName   String?
+  content    String?
+  fileUrl    String?
+  parsedText String?
+  atsScore   Float?
+  version    Int      @default(1)
+  analysis   Json?
+  isPrimary  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+  coverLetters CoverLetter[]
+  attachments  Attachment[]
+
+  @@index([userId, isPrimary])
+  @@map("resumes")
+}
+
+model CoverLetter {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  content   String?
+  fileUrl   String?
+  company   String?
+  position  String?
+  resumeId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume       Resume?       @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+  applications Application[]
+  attachments  Attachment[]
+
+  @@map("cover_letters")
+}
+
+model Attachment {
+  id            String           @id @default(cuid())
+  userId        String
+  applicationId String?
+  resumeId      String?
+  coverLetterId String?
+  name          String
+  url           String
+  mimeType      String?
+  size          Int?
+  category      DocumentCategory @default(OTHER)
+  createdAt     DateTime         @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  resume      Resume?      @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  coverLetter CoverLetter? @relation(fields: [coverLetterId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("attachments")
+}
+
+model Notification {
+  id        String              @id @default(cuid())
+  userId    String
+  type      NotificationType
+  channel   NotificationChannel @default(IN_APP)
+  status    NotificationStatus  @default(UNREAD)
+  title     String
+  body      String?
+  link      String?
+  createdAt DateTime            @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("notifications")
+}
+
+model Recruiter {
+  id          String      @id @default(cuid())
+  userId      String
+  companyId   String?
+  name        String
+  email       String?
+  phone       String?
+  linkedinUrl String?
+  position    String?
+  contactType ContactType @default(RECRUITER)
+  notes       String?
+  lastContact DateTime?
+  followUpAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("recruiters")
+}
+
+model Reminder {
+  id            String              @id @default(cuid())
+  userId        String
+  applicationId String?
+  taskId        String?
+  interviewId   String?
+  title         String
+  scheduledAt   DateTime
+  channel       NotificationChannel @default(EMAIL)
+  sent          Boolean             @default(false)
+  createdAt     DateTime            @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  task        Task?        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  interview   Interview?   @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  @@index([userId, scheduledAt])
+  @@map("reminders")
+}
+
+model ActivityLog {
+  id            String       @id @default(cuid())
+  userId        String
+  applicationId String?
+  type          ActivityType
+  message       String
+  metadata      Json?
+  createdAt     DateTime     @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("activity_logs")
+}
+
+model Settings {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  theme                String  @default("system")
+  language             String  @default("en")
+  timezone             String  @default("UTC")
+  emailNotifications   Boolean @default(true)
+  browserNotifications Boolean @default(true)
+  weeklySummary        Boolean @default(true)
+  weeklySummaryDay     String  @default("sunday")
+  monthlyGoal          Int?    @default(20)
+  weeklyGoal           Int?    @default(5)
+  data                 Json?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("settings")
+}
+
+model UserGoal {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  weeklyApplications  Int     @default(5)
+  monthlyApplications Int     @default(20)
+  targetCompany       String?
+  targetRole          String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_goals")
+}
+
+model Bookmark {
+  id          String   @id @default(cuid())
+  userId      String
+  companyId   String?
+  jobTitle    String?
+  jobUrl      String?
+  companyName String?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("bookmarks")
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  userId    String
+  name      String
+  keyHash   String
+  prefix    String
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  revoked   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_keys")
+}
+
+model Integration {
+  id           String    @id @default(cuid())
+  userId       String
+  provider     String
+  accessToken  String?
+  refreshToken String?
+  expiresAt    DateTime?
+  scope        String?
+  connected    Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, provider])
+  @@map("integrations")
+}
+
+model EmailSubscription {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  marketing Boolean @default(false)
+  product   Boolean @default(true)
+  digest    Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_subscriptions")
+}
+
+// ============================================================
+// Billing / subscription models
+// ============================================================
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  plan                 SubscriptionPlan   @default(FREE)
+  status               SubscriptionStatus @default(TRIALING)
+  features             PlanFeature[]
+  currentPeriodEnd     DateTime?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
