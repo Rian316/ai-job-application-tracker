@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
   BarChart3,
+  Bell,
   Bot,
   Briefcase,
   Building2,
@@ -13,6 +14,7 @@ import {
   KanbanSquare,
   LayoutDashboard,
   Search,
+  Settings,
   Sparkles,
   Users,
   Command as CommandIcon,
@@ -38,6 +40,8 @@ const navigation = [
     { title: "Tasks", href: "/tasks", icon: CheckSquare },
     { title: "Network", href: "/network", icon: Users },
     { title: "Companies", href: "/companies", icon: Building2 },
+    { title: "Notifications", href: "/notifications", icon: Bell },
+    { title: "Settings", href: "/settings", icon: Settings },
   ]},
   { group: "AI Tools", items: [
     { title: "AI Assistant", href: "/assistant", icon: Sparkles },

@@ -43,4 +43,26 @@ Live status of the AI Job Application Tracker build.
 browser check of the server-action HTTP flow pending (dev-mode React Flight arg
 encoding).
 
-## Next: Phase 4 - Tasks, Calendar, Notifications
+## Phase 4 - Tasks, Calendar, Notifications: COMPLETE (2026-08-03)
+
+- Tasks page: grouped to-do/completed lists, overdue badges, recurring add-task
+  dialog, delete confirmation, priority/type labels
+- Calendar page: month grid (interviews violet, tasks primary), day drill-down,
+  meeting join + application links
+- Notifications: full list page (unread dot, mark read/all read, delete),
+  in-app notification helper (`src/lib/notifications.ts`)
+- Reminder cron (`/api/cron/reminders`): in-app reminders for interviews/tasks
+  due within 24h, deduped per run, optional `CRON_SECRET` auth
+- Google Calendar sync: OAuth2 connect → callback → sync routes, token refresh,
+  `Integration` storage, settings card (connect/disconnect/sync)
+- Settings page: notification preferences + application goals forms
+- New sidebar/command-palette entries: Notifications, Settings
+
+**Verified end-to-end:**
+
+- `tsc --noEmit` ✅ `next build` ✅ (0 warnings/errors)
+- Smoke test: login → dashboard, applications, kanban, companies, tasks,
+  calendar, notifications, settings all 200 ✅
+- Cron reminders run idempotently (2 created on first run, 0 on rerun) ✅
+
+## Next: Phase 5 - AI Features

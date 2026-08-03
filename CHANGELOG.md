@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-08-03
+
+### Added
+
+- Tasks page: grouped to-do/completed lists, overdue detection, add-task dialog
+  (recurring + interval), priority badges, delete confirmation
+- Calendar page: month grid of interviews and task deadlines, day drill-down
+  with meeting join links and application links
+- Notifications module: full list page, unread badges, mark-read, mark-all-read,
+  delete; in-app notification helper library
+- Reminder cron endpoint (`/api/cron/reminders`, optional `CRON_SECRET` bearer)
+  that creates in-app reminders for interviews and tasks due within 24h
+- Google Calendar sync: OAuth2 connect/callback/disconnect/sync routes,
+  token storage + refresh in the `Integration` model, upcoming interviews
+  pushed to the user's primary calendar
+- Settings page: notification preferences (email/browser/weekly summary),
+  application goals (weekly/monthly targets, target role/company)
+- Shared PageHeader component; sidebar + command palette entries for
+  Notifications and Settings
+
+### Fixed
+
+- Server/client boundary: `toCalendarEvents` moved out of the `"use client"`
+  calendar component into `src/lib/calendar-events.ts`
+- Reminder dedup looked for reminders `scheduledAt >= now`, producing
+  duplicates on every cron run — now matches any unsent reminder
+
 ## [0.1.0] - 2026-08-02
 
 ### Added

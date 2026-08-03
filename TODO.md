@@ -29,12 +29,13 @@ Roadmap for the AI Job Application Tracker.
 - [x] Kanban board with drag & drop
 - [x] Companies module
 
-## Phase 4 - Tasks, Calendar, Notifications
+## Phase 4 - Tasks, Calendar, Notifications (COMPLETE)
 
-- [ ] Task manager with recurring tasks
-- [ ] Calendar (interviews, follow-ups, deadlines)
-- [ ] Notifications (in-app + email + browser)
-- [ ] Google Calendar sync
+- [x] Task manager with recurring tasks
+- [x] Calendar (interviews, follow-ups, deadlines)
+- [x] Notifications (in-app + email + browser)
+- [x] Google Calendar sync
+- [ ] Marketing pages (Features / Pricing / Docs)
 
 ## Phase 5 - AI Features
 

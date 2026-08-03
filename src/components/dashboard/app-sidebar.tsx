@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart3,
+  Bell,
   Bot,
   Briefcase,
   Building2,
@@ -14,6 +15,7 @@ import {
   LayoutDashboard,
   Palette,
   Search,
+  Settings,
   Sparkles,
   Users,
   Bookmark,
@@ -41,9 +43,14 @@ const mainNav = [
   { title: "Kanban Board", href: "/kanban", icon: KanbanSquare },
   { title: "Calendar", href: "/calendar", icon: CalendarDays },
   { title: "Analytics", href: "/analytics", icon: BarChart3 },
-{ title: "Tasks", href: "/tasks", icon: CheckSquare },
+  { title: "Tasks", href: "/tasks", icon: CheckSquare },
   { title: "Network", href: "/network", icon: Users },
   { title: "Companies", href: "/companies", icon: Building2 },
+];
+
+const systemNav = [
+  { title: "Notifications", href: "/notifications", icon: Bell },
+  { title: "Settings", href: "/settings", icon: Settings },
 ];
 
 const aiNav = [
@@ -133,6 +140,28 @@ export function AppSidebar({ user }: { user: UserMenuProps["user"] }) {
           <SidebarGroupContent>
             <SidebarMenu>
               {libraryNav.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive(item.href)}
+                    tooltip={item.title}
+                  >
+                    <Link href={item.href}>
+                      <item.icon className="size-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>System</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {systemNav.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
