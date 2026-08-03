@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { sendResetPasswordEmail, sendWelcomeEmail } from "@/lib/email";
 import { ok, fail, type ActionResult } from "@/lib/action-result";
+import { failZod } from "@/lib/zod";
 import {
   registerSchema,
   forgotPasswordSchema,
@@ -22,22 +23,13 @@ import {
   type ChangePasswordInput,
 } from "@/validators/auth";
 
-function toZodErrors(error: { issues: { path: PropertyKey[]; message: string }[] }) {
-  const fieldErrors: Record<string, string[]> = {};
-  for (const issue of error.issues) {
-    const key = String(issue.path[0] ?? "form");
-    fieldErrors[key] = fieldErrors[key] ?? [];
-    fieldErrors[key].push(issue.message);
-  }
-  return fieldErrors;
-}
 
 export async function registerAction(
   input: RegisterInput,
 ): Promise<ActionResult> {
   const parsed = registerSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please fix the errors below.", toZodErrors(parsed.error));
+    return failZod(parsed.error);
   }
 
   const { name, email, password } = parsed.data;
@@ -101,7 +93,7 @@ export async function forgotPasswordAction(
 ): Promise<ActionResult> {
   const parsed = forgotPasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please fix the errors below.", toZodErrors(parsed.error));
+    return failZod(parsed.error);
   }
 
   const { email } = parsed.data;
@@ -130,7 +122,7 @@ export async function resetPasswordAction(
 ): Promise<ActionResult> {
   const parsed = resetPasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please fix the errors below.", toZodErrors(parsed.error));
+    return failZod(parsed.error);
   }
 
   const { token, password } = parsed.data;
@@ -174,7 +166,7 @@ export async function updateProfileAction(
 
   const parsed = profileSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please fix the errors below.", toZodErrors(parsed.error));
+    return failZod(parsed.error);
   }
 
   const { name, email } = parsed.data;
@@ -205,7 +197,7 @@ export async function changePasswordAction(
 
   const parsed = changePasswordSchema.safeParse(input);
   if (!parsed.success) {
-    return fail("Please fix the errors below.", toZodErrors(parsed.error));
+    return failZod(parsed.error);
   }
 
   const user = await db.user.findUnique({ where: { id: session.user.id } });

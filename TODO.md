@@ -23,11 +23,11 @@ Roadmap for the AI Job Application Tracker.
 - [x] Landing page (feature grid)
 - [ ] Features / Pricing / Docs marketing pages
 
-## Phase 3 - Applications, Kanban, Companies
+## Phase 3 - Applications, Kanban, Companies (COMPLETE)
 
-- [ ] Applications CRUD (form + table + detail view)
-- [ ] Kanban board with drag & drop
-- [ ] Companies module
+- [x] Applications CRUD (form + table + detail view)
+- [x] Kanban board with drag & drop
+- [x] Companies module
 
 ## Phase 4 - Tasks, Calendar, Notifications
 

@@ -22,6 +22,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test tooling: Vitest, Testing Library, jsdom
 - Project metadata files (CHANGELOG, TODO, PROJECT_STATUS)
 
+## [0.3.0] - 2026-08-03
+
+### Added
+
+- Applications module: TanStack Table list with search, status/source filters,
+  sorting and pagination; create/edit form (react-hook-form + Zod v4);
+  detail page with status stepper, overview, interviews, tasks and activity feed
+- Server actions with ownership checks and activity logging: application CRUD,
+  status updates, bookmark toggle, company CRUD, interview + task CRUD
+- Kanban board with @dnd-kit drag & drop mapped to the 6 pipeline stages
+- Companies module: card grid, detail page with research notes, and CRUD dialog
+- Zod v4 validators for application/company/interview/task inputs
+
+### Fixed
+
+- zod v4 `z.coerce.number()` produced `unknown` resolver types — replaced with
+  string-based numeric fields coerced in server actions
+- Prisma boolean update requires `set` (no `flip` operation)
+- ActivityLog requires a `type` enum on create
+- Application `bookmarked` field (not `isBookmarked`) in queries/components
+
 ## [0.2.0] - 2026-08-03
 
 ### Added
