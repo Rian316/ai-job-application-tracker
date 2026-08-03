@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { StatusStepper } from "@/components/applications/status-stepper";
+import { FollowUpEmailButton } from "@/components/applications/follow-up-email-button";
 import {
   InterviewsSection,
   TasksSection,
@@ -100,6 +101,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                 </a>
               </Button>
             )}
+            <FollowUpEmailButton applicationId={application.id} />
             <Button asChild variant="outline" size="sm">
               <Link href={`/applications/${application.id}/edit`}>
                 <Pencil className="size-4" />

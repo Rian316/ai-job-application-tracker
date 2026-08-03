@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-03
+
+### Added
+
+- AI layer (`src/lib/ai.ts`): OpenAI-powered cover letters, resume analysis,
+  follow-up emails, assistant chat, interview coach and weekly reports —
+  with deterministic offline fallbacks when `OPENAI_API_KEY` is unset
+- Server actions (`src/actions/ai.ts`, 10 actions): cover letter generate +
+  delete, resume create/analyze/set-primary/delete, assistant chat, interview
+  coach, follow-up email generator, weekly report
+- AI Assistant page (`/assistant`): chat UI with suggestion chips and a
+  one-click weekly report generator
+- Cover Letters page (`/cover-letters`): library list, generate dialog
+  (company, position, job description, resume, tone), preview + download
+- Resume Library page (`/resumes`): paste-text resume storage, one-click AI
+  ATS analysis (score + strengths + weaknesses + suggestions), primary resume
+- Interview Coach page (`/interviews`): 8-question mock interview session with
+  per-answer scoring and STAR feedback
+- AI follow-up email button on application detail pages (subject + body,
+  copyable)
+
 ## [0.4.0] - 2026-08-03
 
 ### Added

@@ -37,15 +37,16 @@ Roadmap for the AI Job Application Tracker.
 - [x] Google Calendar sync
 - [ ] Marketing pages (Features / Pricing / Docs)
 
-## Phase 5 - AI Features
+## Phase 5 - AI Features (COMPLETE)
 
-- [ ] AI cover letter generator
-- [ ] AI resume analyzer
-- [ ] AI resume optimizer
-- [ ] AI interview coach
-- [ ] AI email generator
-- [ ] AI chat assistant
-- [ ] AI weekly report
+- [x] AI cover letter generator
+- [x] AI resume analyzer
+- [x] AI resume optimizer
+- [x] AI interview coach
+- [x] AI email generator
+- [x] AI chat assistant
+- [x] AI weekly report
+- [ ] Marketing pages (Features / Pricing / Docs)
 
 ## Phase 6 - Analytics
 

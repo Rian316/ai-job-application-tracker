@@ -65,4 +65,28 @@ encoding).
   calendar, notifications, settings all 200 ✅
 - Cron reminders run idempotently (2 created on first run, 0 on rerun) ✅
 
-## Next: Phase 5 - AI Features
+## Phase 5 - AI Features: COMPLETE (2026-08-03)
+
+- `src/lib/ai.ts`: OpenAI client with deterministic fallbacks (works with or
+  without `OPENAI_API_KEY`) — cover letters, resume analysis, follow-up emails,
+  assistant chat, interview coach, weekly reports
+- 10 server actions registered in production manifest (verified via
+  `server-reference-manifest.json`), all with ownership checks + Zod validation
+- AI Assistant (`/assistant`): chat with suggestion chips + weekly report
+- Cover Letters (`/cover-letters`): generate dialog (JD + resume + tone),
+  library, preview, download
+- Resume Library (`/resumes`): paste-text resumes, AI ATS analysis (score/
+  strengths/weaknesses/suggestions), primary resume
+- Interview Coach (`/interviews`): 8-question mock interview, scored answers
+  with STAR feedback
+- Application detail: AI follow-up email button (subject + copyable body)
+- Fallback generators verified via `tsx` harness: cover letter 903 chars,
+  ATS score computed, follow-up drafted, assistant/coach/report all reply ✅
+
+**Verified end-to-end:**
+
+- `tsc --noEmit` ✅ `next build` ✅ (0 warnings/errors)
+- Smoke test: all 12 dashboard routes render 200 with seeded data ✅
+- Production manifest: all 10 AI actions registered (35 actions total) ✅
+
+## Next: Phase 6 - Analytics
