@@ -274,7 +274,7 @@ model Company {
   recruiters   Recruiter[]
   bookmarks    Bookmark[]
 
-  @@index([userId, name])
+  @@unique([userId, name])
   @@map("companies")
 }
 

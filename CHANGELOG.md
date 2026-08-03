@@ -21,3 +21,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code quality tooling: ESLint, Prettier, Husky, Commitlint, lint-staged
 - Test tooling: Vitest, Testing Library, jsdom
 - Project metadata files (CHANGELOG, TODO, PROJECT_STATUS)
+
+## [0.2.0] - 2026-08-03
+
+### Added
+
+- Database migrations applied (init + company unique index) and seed script with
+  demo user, admin user, 20 applications, interviews, tasks, notifications
+- Server actions: register, login, forgot/reset password, profile update,
+  change password (Zod-validated, bcrypt-hashed)
+- Resend email service with React Email templates (welcome, password reset)
+- Auth pages: login, register, forgot-password, reset-password (glassmorphism
+  cards, react-hook-form + zod, OAuth buttons)
+- Dashboard shell: sidebar navigation, topbar with notifications bell, user
+  menu, Cmd+K command palette, theme toggle
+- Dashboard page: stat cards (applications/interviews/offers/rejected), recent
+  applications, activity feed, upcoming interviews, tasks, response rate
+- Notifications API route for recent notifications
+- Landing page with feature grid and marketing navigation
+- Embedded PostgreSQL dev workflow (scripts/start-db.mjs) for Windows dev
+  machines without Docker
+
+### Fixed
+
+- TooltipProvider missing around Sidebar tooltips (radix-nova sidebar)
+- useSearchParams pages wrapped in Suspense boundaries
+- Zod v4 issue path typing in server actions
+- lucide-react brand icon removal (custom GitHub icon component)
+

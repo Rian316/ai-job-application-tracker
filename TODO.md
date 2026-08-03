@@ -14,14 +14,14 @@ Roadmap for the AI Job Application Tracker.
 - [x] Code quality tooling (ESLint, Prettier, Husky, Commitlint)
 - [x] Docker setup (Dockerfile, docker-compose, .dockerignore)
 
-## Phase 2 - Database, Auth, Dashboard Shell
+## Phase 2 - Database, Auth, Dashboard Shell (COMPLETE)
 
-- [ ] Apply database migrations
-- [ ] Seed script (demo data + admin user)
-- [ ] Registration / Login / Forgot-password pages
-- [ ] Dashboard shell (sidebar, topbar, command palette, theme toggle)
-- [ ] Landing page polish
-- [ ] Pricing / Features / Docs marketing pages
+- [x] Apply database migrations
+- [x] Seed script (demo data + admin user)
+- [x] Registration / Login / Forgot-password pages
+- [x] Dashboard shell (sidebar, topbar, command palette, theme toggle)
+- [x] Landing page (feature grid)
+- [ ] Features / Pricing / Docs marketing pages
 
 ## Phase 3 - Applications, Kanban, Companies
 

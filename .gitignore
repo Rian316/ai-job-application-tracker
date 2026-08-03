@@ -40,6 +40,13 @@ yarn-error.log*
 # keep the example file tracked
 !.env.example
 
+# embedded postgres data
+.postgres-data/
+db-stdout.log
+db-stderr.log
+dev-stdout.log
+dev-stderr.log
+
 # vercel
 .vercel
 
