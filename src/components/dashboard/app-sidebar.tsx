@@ -16,6 +16,7 @@ import {
   Palette,
   Search,
   Settings,
+  Shield,
   Sparkles,
   Users,
   Bookmark,
@@ -51,6 +52,13 @@ const mainNav = [
 const systemNav = [
   { title: "Notifications", href: "/notifications", icon: Bell },
   { title: "Settings", href: "/settings", icon: Settings },
+];
+
+const adminNav = [
+  { title: "Overview", href: "/admin", icon: Shield },
+  { title: "Users", href: "/admin/users", icon: Users },
+  { title: "Subscriptions", href: "/admin/subscriptions", icon: Shield },
+  { title: "Logs", href: "/admin/logs", icon: Shield },
 ];
 
 const aiNav = [
@@ -156,6 +164,30 @@ export function AppSidebar({ user }: { user: UserMenuProps["user"] }) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {user.role === "ADMIN" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminNav.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.href)}
+                      tooltip={item.title}
+                    >
+                      <Link href={item.href}>
+                        <item.icon className="size-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         <SidebarGroup>
           <SidebarGroupLabel>System</SidebarGroupLabel>
