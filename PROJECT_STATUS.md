@@ -89,4 +89,46 @@ encoding).
 - Smoke test: all 12 dashboard routes render 200 with seeded data ✅
 - Production manifest: all 10 AI actions registered (35 actions total) ✅
 
-## Next: Phase 6 - Analytics
+## Phase 6 - Analytics: COMPLETE (2026-08-04)
+
+- `/analytics`: 12-month applications/offers/rejected trend (recharts area
+  chart), status breakdown pie, source performance bars, response rate by
+  source, 6-month activity heatmap (weekly columns, 5 intensity levels)
+- Export: CSV (native), Excel (SheetJS), PDF (jspdf + autotable) — filters
+  respected, filename with date
+
+## Phase 7 - Admin Dashboard: COMPLETE (2026-08-04)
+
+- `/admin` (admin-only): health cards (DB ping, users, applications,
+  companies, subscriptions), 8 latest activity logs, user management table
+  (role toggle USER/ADMIN, delete user), subscription list
+- `/network`: recruiter cards with last-contact, follow-up due badges
+- `/bookmarks`: bookmarked applications (filtered list)
+- `/documents`: documents upload list + AI resume editor entry points
+
+**Verified end-to-end:**
+
+- `tsc --noEmit` ✅ `next build` ✅ (0 warnings/errors)
+
+## Phase 8 - Production Readiness: IN PROGRESS (2026-08-04)
+
+- Marketing pages: `/features` (12 feature cards), `/pricing` (Free $0 / Pro
+  $12 / Team $29, Pro highlighted), `/docs` (6 sections) — shared
+  `MarketingShell` with sticky nav + footer
+- Global `not-found.tsx` (404), `error.tsx` (client error boundary with
+  digest reference), `loading.tsx` spinner
+- `robots.ts` (disallows dashboard/admin/api/auth paths) + `sitemap.ts`
+  (home, marketing, auth pages) using `NEXT_PUBLIC_APP_URL`
+- Security headers confirmed in `next.config.ts` (X-Frame-Options,
+  nosniff, Referrer-Policy, Permissions-Policy)
+
+**Verified end-to-end:**
+
+- `tsc --noEmit` ✅ `next build` ✅ (0 warnings/errors, 38 routes)
+- robots.txt + sitemap.xml generated during build ✅
+
+## Next: Phase 8 remainder
+
+- Docs (README, Architecture, Database, Deployment, API, Contributing)
+- E2E tests (Playwright), CI/CD (GitHub Actions)
+- PWA + offline, public API + webhooks, LinkedIn CSV import

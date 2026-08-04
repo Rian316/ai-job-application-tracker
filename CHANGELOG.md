@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.5.0] - 2026-08-03
+### Added
+
+- Marketing pages with shared `MarketingShell`: Features (12 cards), Pricing
+  (Free / Pro / Team), Docs (getting-started through troubleshooting guides)
+- Global `not-found` (404), `error` (client error boundary) and `loading`
+  pages for the app shell
+- `robots.txt` + `sitemap.xml` generated from `NEXT_PUBLIC_APP_URL`
+- Production build now emits 0 lint warnings/errors (unused imports removed,
+  unescaped entity fixed)
+
+## [0.6.0] - 2026-08-04
+
+### Added
+
+- Analytics page (`/analytics`): 12-month applications/offers/rejected trend
+  chart, status breakdown pie, source performance bars, response rate by
+  source, 6-month activity heatmap
+- Export buttons: CSV, Excel (SheetJS), PDF (jspdf + autotable)
+- Admin dashboard (`/admin`): system health cards (DB/users/applications/
+  companies/subscriptions), recent activity logs, user management with
+  role toggling + deletion, subscription list
+- Sidebar placeholders filled: `/network` (recruiters), `/bookmarks`
+  (filtered application list), `/documents` (documents + AI resume editor)
 
 ### Added
 
