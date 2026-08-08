@@ -110,7 +110,7 @@ export function KanbanBoard({ cards }: { cards: KanbanCard[] }) {
           return (
             <div
               key={column.status}
-              className="flex min-h-64 flex-col rounded-lg border bg-muted/40"
+              className="flex min-h-64 min-w-[280px] flex-col rounded-lg border bg-muted/40"
             >
               <div className="flex items-center justify-between gap-2 border-b bg-card px-3 py-2.5">
                 <div className="flex items-center gap-2">

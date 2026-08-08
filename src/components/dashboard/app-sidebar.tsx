@@ -7,7 +7,6 @@ import {
   Bell,
   Bot,
   Briefcase,
-  Building2,
   CalendarDays,
   CheckSquare,
   FileText,
@@ -42,14 +41,21 @@ const mainNav = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { title: "Applications", href: "/applications", icon: Briefcase },
   { title: "Kanban Board", href: "/kanban", icon: KanbanSquare },
+  { title: "Tasks", href: "/tasks", icon: CheckSquare },
   { title: "Calendar", href: "/calendar", icon: CalendarDays },
   { title: "Analytics", href: "/analytics", icon: BarChart3 },
-  { title: "Tasks", href: "/tasks", icon: CheckSquare },
-  { title: "Network", href: "/network", icon: Users },
-  { title: "Companies", href: "/companies", icon: Building2 },
 ];
 
-const systemNav = [
+const aiNav = [
+  { title: "AI Assistant", href: "/assistant", icon: Sparkles },
+  { title: "Cover Letters", href: "/cover-letters", icon: FileText },
+  { title: "Resume Library", href: "/resumes", icon: Search },
+  { title: "Interview Coach", href: "/interviews", icon: Bot },
+  { title: "Documents", href: "/documents", icon: Palette },
+  { title: "Bookmarks", href: "/bookmarks", icon: Bookmark },
+];
+
+const bottomNav = [
   { title: "Notifications", href: "/notifications", icon: Bell },
   { title: "Settings", href: "/settings", icon: Settings },
 ];
@@ -59,18 +65,6 @@ const adminNav = [
   { title: "Users", href: "/admin/users", icon: Users },
   { title: "Subscriptions", href: "/admin/subscriptions", icon: Shield },
   { title: "Logs", href: "/admin/logs", icon: Shield },
-];
-
-const aiNav = [
-  { title: "AI Assistant", href: "/assistant", icon: Sparkles },
-  { title: "Cover Letters", href: "/cover-letters", icon: FileText },
-  { title: "Resume Library", href: "/resumes", icon: Search },
-  { title: "Interview Coach", href: "/interviews", icon: Bot },
-];
-
-const libraryNav = [
-  { title: "Documents", href: "/documents", icon: Palette },
-  { title: "Bookmarks", href: "/bookmarks", icon: Bookmark },
 ];
 
 export function AppSidebar({ user }: { user: UserMenuProps["user"] }) {
@@ -143,28 +137,6 @@ export function AppSidebar({ user }: { user: UserMenuProps["user"] }) {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Library</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {libraryNav.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <Link href={item.href}>
-                      <item.icon className="size-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
         {user.role === "ADMIN" && (
           <SidebarGroup>
             <SidebarGroupLabel>Admin</SidebarGroupLabel>
@@ -190,10 +162,9 @@ export function AppSidebar({ user }: { user: UserMenuProps["user"] }) {
         )}
 
         <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {systemNav.map((item) => (
+              {bottomNav.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild

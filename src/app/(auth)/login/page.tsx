@@ -5,11 +5,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { Loader2, Mail } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { GithubIcon } from "@/components/github-icon";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -70,10 +68,6 @@ function LoginForm() {
     });
   }
 
-  function onOAuth(provider: "google" | "github") {
-    void signIn(provider, { callbackUrl });
-  }
-
   return (
     <div className="w-full max-w-md">
       <Card className="glass-strong shadow-xl">
@@ -86,31 +80,17 @@ function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              onClick={() => onOAuth("google")}
-            >
-              <Mail className="size-4" />
-              Google
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              onClick={() => onOAuth("github")}
-            >
-              <GithubIcon className="size-4" />
-              GitHub
-            </Button>
+          <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4 text-center">
+            <p className="text-sm font-medium text-foreground">Demo Credentials</p>
+            <p className="mt-1 font-mono text-sm select-all text-muted-foreground">
+              demo@example.com / demo12345
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Separator className="flex-1" />
             <span className="text-xs text-muted-foreground">
-              or continue with email
+              or sign in with email
             </span>
             <Separator className="flex-1" />
           </div>
@@ -144,7 +124,7 @@ function LoginForm() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
+                        placeholder="••••••••"
                         autoComplete="current-password"
                         {...field}
                       />

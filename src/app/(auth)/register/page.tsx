@@ -5,10 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { Loader2, Mail } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-import { GithubIcon } from "@/components/github-icon";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,7 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { registerSchema, type RegisterInput } from "@/validators/auth";
 import { registerAction } from "@/actions/auth";
 
@@ -43,7 +40,7 @@ export default function RegisterPage() {
     startTransition(async () => {
       const result = await registerAction(values);
       if (result.success) {
-        router.push("/dashboard?registered=1");
+        router.push("/login?registered=1");
         router.refresh();
       } else {
         if (result.fieldErrors) {
@@ -59,10 +56,6 @@ export default function RegisterPage() {
     });
   }
 
-  function onOAuth(provider: "google" | "github") {
-    void signIn(provider, { callbackUrl: "/dashboard" });
-  }
-
   return (
     <div className="w-full max-w-md">
       <Card className="glass-strong shadow-xl">
@@ -75,35 +68,6 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              onClick={() => onOAuth("google")}
-            >
-              <Mail className="size-4" />
-              Google
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              onClick={() => onOAuth("github")}
-            >
-              <GithubIcon className="size-4" />
-              GitHub
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">
-              or sign up with email
-            </span>
-            <Separator className="flex-1" />
-          </div>
-
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField

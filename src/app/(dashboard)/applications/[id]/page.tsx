@@ -256,7 +256,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                   <div className="min-w-0">
                     <p className="text-muted-foreground">{log.message}</p>
                     <p className="text-xs text-muted-foreground/60">
-                      {format(log.createdAt, "MMM d, yyyy Â· h:mm a")}
+                      {format(log.createdAt, "MMM d, yyyy · h:mm a")}
                     </p>
                   </div>
                 </li>

@@ -5,13 +5,11 @@ import Link from "next/link";
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
   type SortingState,
-  type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import {
@@ -85,7 +83,6 @@ export type ApplicationRow = {
 export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
   const [sourceFilter, setSourceFilter] = React.useState<string>("all");
 
@@ -110,12 +107,9 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
               <Bookmark className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
             )}
             <div className="min-w-0">
-              <Link
-                href={`/applications/${row.original.id}`}
-                className="block truncate font-medium hover:underline"
-              >
+              <p className="truncate font-medium">
                 {row.original.position}
-              </Link>
+              </p>
               <p className="truncate text-xs text-muted-foreground">
                 {row.original.companyName}
               </p>
@@ -138,22 +132,24 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
       },
       {
         accessorKey: "priority",
-        header: "Priority",
+        header: () => <span className="hidden sm:inline">Priority</span>,
         cell: ({ row }) => {
           const config =
             priorityConfig[row.original.priority as keyof typeof priorityConfig];
           return (
-            <Badge variant="secondary" className={config?.className}>
-              {config?.label ?? row.original.priority}
-            </Badge>
+            <span className="hidden sm:inline">
+              <Badge variant="secondary" className={config?.className}>
+                {config?.label ?? row.original.priority}
+              </Badge>
+            </span>
           );
         },
       },
       {
         accessorKey: "source",
-        header: "Source",
+        header: () => <span className="hidden sm:inline">Source</span>,
         cell: ({ row }) => (
-          <span className="text-sm text-muted-foreground">
+          <span className="hidden sm:inline text-sm text-muted-foreground">
             {sourceConfig[row.original.source as keyof typeof sourceConfig] ??
               row.original.source}
           </span>
@@ -217,15 +213,25 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
     });
   }, [data, statusFilter, sourceFilter]);
 
+  const [search, setSearch] = React.useState("");
+
+  const searched = React.useMemo(() => {
+    if (!search) return filtered;
+    const q = search.toLowerCase();
+    return filtered.filter(
+      (app) =>
+        app.position.toLowerCase().includes(q) ||
+        app.companyName.toLowerCase().includes(q),
+    );
+  }, [filtered, search]);
+
   const table = useReactTable({
-    data: filtered,
+    data: searched,
     columns,
-    state: { sorting, columnFilters },
+    state: { sorting },
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageSize: 15 } },
   });
@@ -237,10 +243,8 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search position or company..."
-            value={(table.getColumn("position")?.getFilterValue() as string) ?? ""}
-            onChange={(e) =>
-              table.getColumn("position")?.setFilterValue(e.target.value)
-            }
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
           />
         </div>
@@ -295,7 +299,11 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/applications/${row.original.id}`)}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -312,8 +320,10 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
                   colSpan={columns.length}
                   className="h-32 text-center text-muted-foreground"
                 >
-                  No applications found. Add your first application to get
-                  started.
+                  <p>No applications found.</p>
+                  {(statusFilter !== "all" || sourceFilter !== "all" || search) && (
+                    <p className="mt-1 text-xs">Try clearing your filters or search.</p>
+                  )}
                 </TableCell>
               </TableRow>
             )}
@@ -323,7 +333,7 @@ export function ApplicationsTable({ data }: { data: ApplicationRow[] }) {
 
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <p>
-          {table.getFilteredRowModel().rows.length} of {data.length} applications
+          {searched.length} of {data.length} applications
         </p>
         <div className="flex items-center gap-2">
           <Button

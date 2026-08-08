@@ -106,9 +106,12 @@ export default async function TasksPage() {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed py-12 text-center">
-      <Inbox className="size-8 text-muted-foreground/60" />
-      <p className="text-sm text-muted-foreground">Nothing here yet</p>
+    <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-muted-foreground/25 py-8 text-center">
+      <Inbox className="size-8 text-muted-foreground/50" />
+      <p className="text-sm font-medium">Nothing here yet</p>
+      <p className="max-w-xs text-xs text-muted-foreground">
+        Add a task to track follow-ups, interview prep, or reminders.
+      </p>
     </div>
   );
 }

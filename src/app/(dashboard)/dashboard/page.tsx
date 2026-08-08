@@ -5,6 +5,8 @@ import {
   CalendarDays,
   CheckCircle2,
   Clock,
+  Inbox,
+  Plus,
   TrendingUp,
   XCircle,
 } from "lucide-react";
@@ -14,6 +16,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { statusConfig, priorityConfig } from "@/lib/status";
+import { PageHeader } from "@/components/page-header";
 import {
   Card,
   CardContent,
@@ -72,25 +75,22 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">
-            {format(new Date(), "EEEE, MMMM d")} · Here&apos;s your job search overview
-          </p>
-        </div>
+      <PageHeader
+        title="Dashboard"
+        description={`${format(new Date(), "EEEE, MMMM d")} · Here&apos;s your job search overview`}
+      >
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm">
             <Link href="/applications/new">
-              <Briefcase className="size-4" />
+              <Plus className="size-4" />
               Add application
             </Link>
           </Button>
           <Button asChild size="sm">
-            <Link href="/assistant">Ask AI</Link>
+            <Link href="/assistant">AI Assistant</Link>
           </Button>
         </div>
-      </div>
+      </PageHeader>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
@@ -98,26 +98,28 @@ export default async function DashboardPage() {
           label="Applications this month"
           value={monthCount}
           hint={`Weekly goal: ${settings?.weeklyGoal ?? 5}/week · ${weekCount} this week`}
+          iconBg="bg-primary/10 text-primary"
         />
         <StatCard
           icon={CalendarDays}
           label="Interviews"
           value={interviewCount}
           hint="Total interviews scheduled"
+          iconBg="bg-violet-500/10 text-violet-500"
         />
         <StatCard
           icon={CheckCircle2}
           label="Offers"
           value={offerCount}
           hint="Applications with offers"
-          accent="text-emerald-500"
+          iconBg="bg-emerald-500/10 text-emerald-500"
         />
         <StatCard
           icon={XCircle}
           label="Rejected"
           value={rejectedCount}
           hint="Don't give up"
-          accent="text-rose-500"
+          iconBg="bg-rose-500/10 text-rose-500"
         />
       </div>
 
@@ -154,11 +156,6 @@ export default async function DashboardPage() {
                       <p className="truncate text-xs text-muted-foreground">
                         {app.companyName}
                       </p>
-                    </div>
-                    <div className="hidden sm:block">
-                      <Badge variant="secondary" className="font-normal">
-                        {app.companyName}
-                      </Badge>
                     </div>
                     <StatusBadge status={app.status} />
                   </div>
@@ -256,11 +253,20 @@ export default async function DashboardPage() {
             <CardHeader>
               <CardTitle>Response rate</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <div className="flex items-center gap-3">
                 <div className="text-3xl font-semibold">{responseRate}%</div>
                 <TrendingUp className="size-5 text-emerald-500" />
               </div>
+              <div className="h-2 overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{ width: `${Math.min(responseRate, 100)}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {rejectedCount + offerCount + interviewCount} responses out of {totalApps} applications
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -274,19 +280,21 @@ function StatCard({
   label,
   value,
   hint,
-  accent,
+  iconBg,
 }: {
   icon: typeof Briefcase;
   label: string;
   value: number;
   hint?: string;
-  accent?: string;
+  iconBg?: string;
 }) {
   return (
     <Card>
-      <CardContent className="pt-6">
+      <CardContent className="min-w-0 pt-6">
         <div className="flex items-center justify-between">
-          <Icon className={cn("size-4 text-muted-foreground", accent)} />
+          <div className={cn("flex size-9 items-center justify-center rounded-lg", iconBg ?? "bg-muted text-muted-foreground")}>
+            <Icon className="size-4" />
+          </div>
         </div>
         <div className="mt-3 text-2xl font-semibold">{value}</div>
         <p className="text-sm text-muted-foreground">{label}</p>
@@ -338,13 +346,16 @@ function EmptyState({
   title,
   description,
   cta,
+  icon: Icon = Inbox,
 }: {
   title: string;
   description: string;
   cta?: { href: string; label: string };
+  icon?: typeof Inbox;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed py-8 text-center">
+    <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-muted-foreground/25 py-8 text-center">
+      <Icon className="size-8 text-muted-foreground/50" />
       <p className="text-sm font-medium">{title}</p>
       <p className="max-w-xs text-xs text-muted-foreground">{description}</p>
       {cta && (

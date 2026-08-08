@@ -133,8 +133,8 @@ export function InterviewsSection({
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {format(interview.scheduledAt, "EEEE, MMM d, yyyy Â· h:mm a")} Â· {interview.duration} min
-                  {interview.location ? ` Â· ${interview.location}` : ""}
+                  {format(interview.scheduledAt, "EEEE, MMM d, yyyy · h:mm a")} · {interview.duration} min
+                  {interview.location ? ` · ${interview.location}` : ""}
                 </p>
                 {interview.notes && (
                   <p className="line-clamp-2 text-xs text-muted-foreground">
@@ -329,7 +329,7 @@ function InterviewDialog({ applicationId }: { applicationId: string }) {
               name="scheduledAt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Scheduled for *</FormLabel>
+                  <FormLabel>Scheduled for <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input type="datetime-local" {...field} />
                   </FormControl>
@@ -551,7 +551,7 @@ function TaskDialog({ applicationId }: { applicationId: string }) {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title *</FormLabel>
+                  <FormLabel>Title <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Send follow-up email" {...field} />
                   </FormControl>

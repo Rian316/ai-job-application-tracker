@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -19,10 +20,40 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
+const pageNames: Record<string, string> = {
+  dashboard: "Dashboard",
+  applications: "Applications",
+  kanban: "Kanban Board",
+  calendar: "Calendar",
+  analytics: "Analytics",
+  tasks: "Tasks",
+  network: "Network",
+  companies: "Companies",
+  notifications: "Notifications",
+  settings: "Settings",
+  assistant: "AI Assistant",
+  "cover-letters": "Cover Letters",
+  resumes: "Resume Library",
+  interviews: "Interview Coach",
+  documents: "Documents",
+  bookmarks: "Bookmarks",
+  admin: "Admin",
+};
+
+function getPageName(pathname: string) {
+  const segment = pathname.split("/").filter(Boolean)[0];
+  return pageNames[segment ?? ""] ?? "Dashboard";
+}
+
 export function DashboardHeader() {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-md">
       <SidebarTrigger />
+      <span className="text-sm font-medium text-muted-foreground">
+        {getPageName(pathname)}
+      </span>
       <div className="flex-1" />
       <NotificationsButton />
       <ThemeToggle />
@@ -52,7 +83,7 @@ function NotificationsButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Notifications">
+        <Button variant="ghost" size="icon" aria-label="Notifications" role="button">
           <Bell className="size-4" />
           {data?.some((n) => n.status === "UNREAD") && (
             <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />

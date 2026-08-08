@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
   KanbanBoard,
@@ -31,20 +32,17 @@ export default async function KanbanPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Kanban</h1>
-          <p className="text-sm text-muted-foreground">
-            Drag applications between stages to update their status
-          </p>
-        </div>
+      <PageHeader
+        title="Kanban"
+        description="Drag applications between stages to update their status"
+      >
         <Button asChild size="sm">
           <Link href="/applications/new">
             <Plus className="size-4" />
             Add application
           </Link>
         </Button>
-      </div>
+      </PageHeader>
 
       <KanbanBoard cards={cards as unknown as KanbanCard[]} />
     </div>

@@ -3,6 +3,7 @@ import { Building2, Globe, MapPin, Star } from "lucide-react";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CompanyForm } from "@/components/companies/company-form";
@@ -23,15 +24,12 @@ export default async function CompaniesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Companies</h1>
-          <p className="text-sm text-muted-foreground">
-            {companies.length} tracked · research notes, interview experience and salary data
-          </p>
-        </div>
+      <PageHeader
+        title="Companies"
+        description={`${companies.length} tracked · research notes, interview experience and salary data`}
+      >
         <CompanyForm mode="create" />
-      </div>
+      </PageHeader>
 
       {companies.length === 0 ? (
         <Card>

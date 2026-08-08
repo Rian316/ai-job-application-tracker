@@ -25,7 +25,7 @@ export default async function DashboardLayout({
       <AppSidebar user={user} />
       <SidebarInset>
         <DashboardHeader />
-        <main className="flex-1 px-4 py-6 lg:px-8">{children}</main>
+        <main className="flex-1 px-4 py-6 lg:px-8 animate-fade-in">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

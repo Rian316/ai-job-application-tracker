@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
   ApplicationsTable,
@@ -32,20 +33,17 @@ export default async function ApplicationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Applications</h1>
-          <p className="text-sm text-muted-foreground">
-            {applications.length} tracked Â· bookmark, filter and manage every application
-          </p>
-        </div>
+      <PageHeader
+        title="Applications"
+        description={`${applications.length} tracked · bookmark, filter and manage every application`}
+      >
         <Button asChild size="sm">
           <Link href="/applications/new">
             <Plus className="size-4" />
             Add application
           </Link>
         </Button>
-      </div>
+      </PageHeader>
 
       <ApplicationsTable data={applications as unknown as ApplicationRow[]} />
     </div>

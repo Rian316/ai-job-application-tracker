@@ -121,7 +121,7 @@ export function ApplicationForm({
               name="position"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Position title *</FormLabel>
+                  <FormLabel>Position title <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Senior Frontend Engineer" {...field} />
                   </FormControl>
@@ -134,7 +134,7 @@ export function ApplicationForm({
               name="companyName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Company *</FormLabel>
+                  <FormLabel>Company <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Acme Inc." {...field} />
                   </FormControl>
@@ -459,7 +459,7 @@ export function ApplicationForm({
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+    <h3 className="text-xs font-medium text-muted-foreground">
       {children}
     </h3>
   );

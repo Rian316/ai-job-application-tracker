@@ -111,7 +111,7 @@ export function TaskDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title *</FormLabel>
+                  <FormLabel>Title <span className="text-destructive">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Send follow-up email" {...field} />
                   </FormControl>

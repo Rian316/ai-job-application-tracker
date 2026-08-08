@@ -7,7 +7,6 @@ import {
   Bell,
   Bot,
   Briefcase,
-  Building2,
   CalendarDays,
   CheckSquare,
   FileText,
@@ -16,7 +15,6 @@ import {
   Search,
   Settings,
   Sparkles,
-  Users,
   Command as CommandIcon,
 } from "lucide-react";
 
@@ -35,18 +33,18 @@ const navigation = [
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { title: "Applications", href: "/applications", icon: Briefcase },
     { title: "Kanban Board", href: "/kanban", icon: KanbanSquare },
+    { title: "Tasks", href: "/tasks", icon: CheckSquare },
     { title: "Calendar", href: "/calendar", icon: CalendarDays },
     { title: "Analytics", href: "/analytics", icon: BarChart3 },
-    { title: "Tasks", href: "/tasks", icon: CheckSquare },
-    { title: "Network", href: "/network", icon: Users },
-    { title: "Companies", href: "/companies", icon: Building2 },
-    { title: "Notifications", href: "/notifications", icon: Bell },
-    { title: "Settings", href: "/settings", icon: Settings },
   ]},
   { group: "AI Tools", items: [
     { title: "AI Assistant", href: "/assistant", icon: Sparkles },
     { title: "Cover Letters", href: "/cover-letters", icon: FileText },
     { title: "Interview Coach", href: "/interviews", icon: Bot },
+  ]},
+  { group: "System", items: [
+    { title: "Notifications", href: "/notifications", icon: Bell },
+    { title: "Settings", href: "/settings", icon: Settings },
   ]},
 ];
 
