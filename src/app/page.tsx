@@ -99,7 +99,7 @@ export default function LandingPage() {
           </Badge>
           <h1 className="max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
             Land your dream job with{" "}
-            <span className="text-gradient">AI on your side</span>
+            <span className="bg-gradient-to-r from-purple-500 via-blue-400 to-emerald-400 bg-clip-text text-transparent">AI on your side</span>
           </h1>
           <p className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
             Track every application, generate cover letters, analyze your resume,
